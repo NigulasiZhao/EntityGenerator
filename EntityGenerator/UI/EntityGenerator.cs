@@ -253,10 +253,27 @@ namespace EntityGenerator.UI
         /// <param name="e"></param>
         private void btnOracleConnectDb_Click(object sender, EventArgs e)
         {
-            //得到数据库参数.
             string server = this.txtOracleServer.Text.Trim();
             string uid = this.txtOracleUserID.Text.Trim();
             string pwd = this.txtOraclePwd.Text.Trim();
+
+            //ToolSetting.Language = ".Net";
+            //ToolSetting.Postfix = this.txtDotNetPostfix.Text.Trim();
+
+            //ToolSetting.TabSize = Convert.ToInt32(this.txtTabSize.Text.Trim());
+            //ToolSetting.SavePath = this.txtSavePath.Text.Trim();
+            //ToolSetting.References = ToolSetting.FormatStringArray(
+            //        Regex.Split(this.rtbReferencesList.Text.Trim(), "\n+", RegexOptions.None));
+            //ToolSetting.OracleDataMapping = (DataTable)this.dgvOracleMapping.DataSource;
+            ToolSetting.ServiceName = server;
+            ToolSetting.UserName = uid;
+            ToolSetting.UserPassWord = pwd;
+            /*
+             * 保存用户设置信息
+             * ***/
+            ToolSetting.SaveUserSetting();
+            //得到数据库参数.
+            
 
             //相关验证.
             if (server.Equals("") || uid.Equals(""))
@@ -551,6 +568,9 @@ namespace EntityGenerator.UI
             {
                 this.rtbReferencesList.Text += ToolSetting.References[i] + "\n";
             }
+            this.txtOracleServer.Text = ToolSetting.ServiceName;
+            this.txtOracleUserID.Text = ToolSetting.UserName;
+            this.txtOraclePwd.Text = ToolSetting.UserPassWord;
 
             this.txtSavePath.Text = ToolSetting.SavePath;
 
@@ -855,6 +875,11 @@ namespace EntityGenerator.UI
                 this.txtTabControlOneClassRemark_Enter(new object(), new EventArgs());
                 return;
             }
+        }
+
+        private void txtOracleServer_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

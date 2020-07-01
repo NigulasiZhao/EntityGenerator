@@ -130,26 +130,20 @@ namespace EntityGenerator.GeneratorMethod
         {
             return Java_FormatAttributeName(word);
         }
-
-        /// <summary>
-        /// 得到Java字段的'读'访问器名称.
-        /// </summary>
-        /// <param name="field">字段名称</param>
-        /// <returns>访问器名称</returns>
-        public static string GetReadAccessorName(string field)
+        public static string ChartConversion(string CharText)
         {
-            return "get" + CapFirstLetter(field);
+            string CompleteChar = string.Empty;
+            string[] CharArr = CharText.ToLower().Split('_');
+            foreach (var item in CharArr)
+            {
+                char firstChar = Char.ToUpper(item[0]);
+                StringBuilder strBlder = new StringBuilder(item);
+                strBlder[0] = firstChar;
+                CompleteChar += strBlder.ToString() + "_";
+            }
+            return CompleteChar.TrimEnd('_');
         }
 
-        /// <summary>
-        /// 得到Java字段的'写'访问器名称.
-        /// </summary>
-        /// <param name="field">字段名称</param>
-        /// <returns>访问器名称</returns>
-        public static string GetWriteAccessorName(string field)
-        {
-            return "set" + CapFirstLetter(field);
-        }
 
 
         /// <summary>

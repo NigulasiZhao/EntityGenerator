@@ -160,4 +160,7 @@
     </Oracle>
   </DataTypeMapping>
   <SavePath>C:\.Net实体类</SavePath>
+  <ServiceName>(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = 192.168.88.140)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = ORCL)))</ServiceName>
+  <UserName>GWGIS</UserName>
+  <UserPassWord>hdkj</UserPassWord>
 </Setting>

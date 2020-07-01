@@ -16,6 +16,9 @@ namespace EntityGenerator.SystemSetting
         private static string[] _references;
         private static int _tabsize;
         private static string _savePath;
+        private static string _serviceName;
+        private static string _userName;
+        private static string _userPassWord;
         private static DataTable _sqlDataMapping;
         private static DataTable _accessDataMapping;
         private static DataTable _oracleDataMapping;
@@ -40,6 +43,9 @@ namespace EntityGenerator.SystemSetting
                 ToolSetting._postfix = settings.SelectSingleNode("/Setting/Postfix").InnerText;
                 ToolSetting._tabsize = Convert.ToInt32(settings.SelectSingleNode("/Setting/TabSize").InnerText);
                 ToolSetting._savePath = settings.SelectSingleNode("/Setting/SavePath").InnerText;
+                ToolSetting._serviceName = settings.SelectSingleNode("/Setting/ServiceName").InnerText;
+                ToolSetting._userName = settings.SelectSingleNode("/Setting/UserName").InnerText;
+                ToolSetting._userPassWord = settings.SelectSingleNode("/Setting/UserPassWord").InnerText;
                 ToolSetting._references = ToolSetting.GetReferences(settings);
                 ToolSetting._sqlDataMapping = ToolSetting.GetDataTypeMapping(settings, "SqlServer");
                 ToolSetting._accessDataMapping = ToolSetting.GetDataTypeMapping(settings, "Access");
@@ -69,6 +75,9 @@ namespace EntityGenerator.SystemSetting
                 settings.SelectSingleNode("/Setting/Postfix").InnerText = ToolSetting._postfix;
                 settings.SelectSingleNode("/Setting/TabSize").InnerText = ToolSetting._tabsize.ToString();
                 settings.SelectSingleNode("/Setting/SavePath").InnerText = ToolSetting._savePath;
+                settings.SelectSingleNode("/Setting/ServiceName").InnerText = ToolSetting._serviceName;
+                settings.SelectSingleNode("/Setting/UserName").InnerText = ToolSetting._userName;
+                settings.SelectSingleNode("/Setting/UserPassWord").InnerText = ToolSetting._userPassWord;
                 ToolSetting.SaveReferenceList(settings);
                 ToolSetting.SaveDataTypeMappingInfo(settings, "SqlServer");
                 ToolSetting.SaveDataTypeMappingInfo(settings, "Access");
@@ -400,6 +409,51 @@ namespace EntityGenerator.SystemSetting
                 item.AppendChild(dbType);
                 item.AppendChild(codeType);
                 typeMap.AppendChild(item);
+            }
+        }
+
+        /// <summary>
+        /// 获取或设置所生成的实体类的存储路径.
+        /// </summary>
+        public static string ServiceName
+        {
+            get
+            {
+                return ToolSetting._serviceName;
+            }
+            set
+            {
+                ToolSetting._serviceName = value;
+            }
+        }
+
+        /// <summary>
+        /// 获取或设置所生成的实体类的存储路径.
+        /// </summary>
+        public static string UserName
+        {
+            get
+            {
+                return ToolSetting._userName;
+            }
+            set
+            {
+                ToolSetting._userName = value;
+            }
+        }
+
+        /// <summary>
+        /// 获取或设置所生成的实体类的存储路径.
+        /// </summary>
+        public static string UserPassWord
+        {
+            get
+            {
+                return ToolSetting._userPassWord;
+            }
+            set
+            {
+                ToolSetting._userPassWord = value;
             }
         }
     }

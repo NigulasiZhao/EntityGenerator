@@ -96,7 +96,7 @@
             this.tbcMain.Location = new System.Drawing.Point(0, 0);
             this.tbcMain.Name = "tbcMain";
             this.tbcMain.SelectedIndex = 0;
-            this.tbcMain.Size = new System.Drawing.Size(771, 532);
+            this.tbcMain.Size = new System.Drawing.Size(891, 532);
             this.tbcMain.TabIndex = 0;
             this.tbcMain.SelectedIndexChanged += new System.EventHandler(this.tbcMain_SelectedIndexChanged);
             // 
@@ -118,7 +118,7 @@
             this.tbpFromDB.Controls.Add(this.groupBox3);
             this.tbpFromDB.Location = new System.Drawing.Point(4, 22);
             this.tbpFromDB.Name = "tbpFromDB";
-            this.tbpFromDB.Size = new System.Drawing.Size(763, 506);
+            this.tbpFromDB.Size = new System.Drawing.Size(883, 506);
             this.tbpFromDB.TabIndex = 2;
             this.tbpFromDB.Tag = "FromDB";
             this.tbpFromDB.Text = "从数据库";
@@ -139,7 +139,7 @@
             // 
             this.lblTabStructure.AutoSize = true;
             this.lblTabStructure.ForeColor = System.Drawing.Color.Blue;
-            this.lblTabStructure.Location = new System.Drawing.Point(207, 210);
+            this.lblTabStructure.Location = new System.Drawing.Point(292, 210);
             this.lblTabStructure.Name = "lblTabStructure";
             this.lblTabStructure.Size = new System.Drawing.Size(107, 12);
             this.lblTabStructure.TabIndex = 14;
@@ -156,7 +156,7 @@
             this.gpbOracle.Controls.Add(this.label1);
             this.gpbOracle.Location = new System.Drawing.Point(32, 69);
             this.gpbOracle.Name = "gpbOracle";
-            this.gpbOracle.Size = new System.Drawing.Size(690, 91);
+            this.gpbOracle.Size = new System.Drawing.Size(829, 91);
             this.gpbOracle.TabIndex = 12;
             this.gpbOracle.TabStop = false;
             this.gpbOracle.Text = "数据库参数";
@@ -182,6 +182,7 @@
             this.txtOracleServer.Name = "txtOracleServer";
             this.txtOracleServer.Size = new System.Drawing.Size(203, 21);
             this.txtOracleServer.TabIndex = 4;
+            this.txtOracleServer.TextChanged += new System.EventHandler(this.txtOracleServer_TextChanged);
             // 
             // btnOracleConnectDb
             // 
@@ -232,7 +233,7 @@
             // 
             // btnGeneratedFromDb
             // 
-            this.btnGeneratedFromDb.Location = new System.Drawing.Point(610, 451);
+            this.btnGeneratedFromDb.Location = new System.Drawing.Point(703, 449);
             this.btnGeneratedFromDb.Name = "btnGeneratedFromDb";
             this.btnGeneratedFromDb.Size = new System.Drawing.Size(113, 29);
             this.btnGeneratedFromDb.TabIndex = 10;
@@ -245,7 +246,7 @@
             this.txtTabControlOneClassRemark.BackColor = System.Drawing.Color.FloralWhite;
             this.txtTabControlOneClassRemark.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtTabControlOneClassRemark.Font = new System.Drawing.Font("宋体", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.txtTabControlOneClassRemark.Location = new System.Drawing.Point(526, 348);
+            this.txtTabControlOneClassRemark.Location = new System.Drawing.Point(678, 328);
             this.txtTabControlOneClassRemark.Multiline = true;
             this.txtTabControlOneClassRemark.Name = "txtTabControlOneClassRemark";
             this.txtTabControlOneClassRemark.ReadOnly = true;
@@ -260,7 +261,7 @@
             this.txtTabControlOneFieldInfo.BackColor = System.Drawing.Color.FloralWhite;
             this.txtTabControlOneFieldInfo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtTabControlOneFieldInfo.Font = new System.Drawing.Font("宋体", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.txtTabControlOneFieldInfo.Location = new System.Drawing.Point(526, 225);
+            this.txtTabControlOneFieldInfo.Location = new System.Drawing.Point(678, 205);
             this.txtTabControlOneFieldInfo.Multiline = true;
             this.txtTabControlOneFieldInfo.Name = "txtTabControlOneFieldInfo";
             this.txtTabControlOneFieldInfo.ReadOnly = true;
@@ -274,7 +275,7 @@
             // 
             this.lblClassRemark.AutoSize = true;
             this.lblClassRemark.ForeColor = System.Drawing.Color.Blue;
-            this.lblClassRemark.Location = new System.Drawing.Point(524, 333);
+            this.lblClassRemark.Location = new System.Drawing.Point(608, 333);
             this.lblClassRemark.Name = "lblClassRemark";
             this.lblClassRemark.Size = new System.Drawing.Size(53, 12);
             this.lblClassRemark.TabIndex = 7;
@@ -284,7 +285,7 @@
             // 
             this.lblFieldRemark.AutoSize = true;
             this.lblFieldRemark.ForeColor = System.Drawing.Color.Blue;
-            this.lblFieldRemark.Location = new System.Drawing.Point(524, 210);
+            this.lblFieldRemark.Location = new System.Drawing.Point(607, 210);
             this.lblFieldRemark.Name = "lblFieldRemark";
             this.lblFieldRemark.Size = new System.Drawing.Size(65, 12);
             this.lblFieldRemark.TabIndex = 6;
@@ -295,7 +296,7 @@
             this.dgvTableOrViewStructure.AllowUserToAddRows = false;
             this.dgvTableOrViewStructure.BackgroundColor = System.Drawing.Color.FloralWhite;
             this.dgvTableOrViewStructure.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvTableOrViewStructure.Location = new System.Drawing.Point(209, 225);
+            this.dgvTableOrViewStructure.Location = new System.Drawing.Point(294, 226);
             this.dgvTableOrViewStructure.MultiSelect = false;
             this.dgvTableOrViewStructure.Name = "dgvTableOrViewStructure";
             this.dgvTableOrViewStructure.ReadOnly = true;
@@ -313,9 +314,9 @@
             this.clbTablesAndView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.clbTablesAndView.Font = new System.Drawing.Font("宋体", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.clbTablesAndView.FormattingEnabled = true;
-            this.clbTablesAndView.Location = new System.Drawing.Point(32, 229);
+            this.clbTablesAndView.Location = new System.Drawing.Point(29, 228);
             this.clbTablesAndView.Name = "clbTablesAndView";
-            this.clbTablesAndView.Size = new System.Drawing.Size(159, 249);
+            this.clbTablesAndView.Size = new System.Drawing.Size(256, 249);
             this.clbTablesAndView.TabIndex = 4;
             this.clbTablesAndView.SelectedIndexChanged += new System.EventHandler(this.clbTablesAndView_SelectedIndexChanged);
             // 
@@ -324,7 +325,7 @@
             this.txtTabControlOneNamespace.Font = new System.Drawing.Font("宋体", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.txtTabControlOneNamespace.Location = new System.Drawing.Point(121, 173);
             this.txtTabControlOneNamespace.Name = "txtTabControlOneNamespace";
-            this.txtTabControlOneNamespace.Size = new System.Drawing.Size(385, 24);
+            this.txtTabControlOneNamespace.Size = new System.Drawing.Size(740, 24);
             this.txtTabControlOneNamespace.TabIndex = 3;
             // 
             // lblNamespace1
@@ -342,7 +343,7 @@
             this.groupBox3.Controls.Add(this.rdbOracle);
             this.groupBox3.Location = new System.Drawing.Point(32, 13);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(691, 50);
+            this.groupBox3.Size = new System.Drawing.Size(829, 50);
             this.groupBox3.TabIndex = 0;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "数据库类型";
@@ -386,7 +387,7 @@
             this.tbpSet.Location = new System.Drawing.Point(4, 22);
             this.tbpSet.Name = "tbpSet";
             this.tbpSet.Padding = new System.Windows.Forms.Padding(3);
-            this.tbpSet.Size = new System.Drawing.Size(763, 506);
+            this.tbpSet.Size = new System.Drawing.Size(883, 506);
             this.tbpSet.TabIndex = 1;
             this.tbpSet.Tag = "Set";
             this.tbpSet.Text = "系统设置";
@@ -577,7 +578,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(771, 532);
+            this.ClientSize = new System.Drawing.Size(891, 532);
             this.Controls.Add(this.tbcMain);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));

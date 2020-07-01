@@ -35,7 +35,7 @@ namespace EntityGenerator.GeneratorMethod
         {
             claName = GeneratorTool.FormatTableOrFieldName(claName) + ToolSetting.Postfix;
             this.GetClassHeader(namespaceName, refList, claName, claRemark);
-            this.GetStructureMethod(claName);
+            //this.GetStructureMethod(claName);
             this.GetStruMethodWithParams(claName, fieldInfo);
             this.GetFieldList(fieldInfo);
             this.GetAttrList(fieldInfo);
@@ -107,7 +107,9 @@ namespace EntityGenerator.GeneratorMethod
         /// <param name="claRemark">类注释</param>
         private void GetClassHeader(string namespaceName, string[] refList, string claName, string claRemark)
         {
-            claName = GeneratorTool.CapFirstLetter(claName);
+            //claName = GeneratorTool.CapFirstLetter(claName);
+            claName = GeneratorTool.ChartConversion(claName);
+
             string str = "";
             str += GeneratorTool.GetEntityClassHeader();
             str += "\n";
@@ -115,7 +117,7 @@ namespace EntityGenerator.GeneratorMethod
             {
                 str += refList[i] + "\n";
             }
-            str += "\nnamespace " + namespaceName + "\n{\n";
+            str += "\nnamespace " + namespaceName + "\n{\n[Serializable]\n[DataContract]\n[System.ComponentModel.DataAnnotations.Schema.Table(\"" + claName + "\")]\n";
 
             str += GeneratorTool.ForwardIndentCodeBlock(this.FormatClassRemark(claRemark), 1);
             str += "\n" + this._tab + "public class " + claName + "{\n";
@@ -147,7 +149,7 @@ namespace EntityGenerator.GeneratorMethod
             Field field = new Field();
             for (int i = 0; i < fieldInfo.Rows.Count; i++)
             {
-                field.name = GeneratorTool.FormatTableOrFieldName(fieldInfo.Rows[i][0].ToString());
+                field.name = GeneratorTool.ChartConversion(GeneratorTool.FormatTableOrFieldName(fieldInfo.Rows[i][0].ToString()));
                 field.type = fieldInfo.Rows[i][1].ToString();
                 field.remark = fieldInfo.Rows[i][2].ToString();
                 field.constrainttype = fieldInfo.Rows[i][3].ToString();
@@ -203,7 +205,7 @@ namespace EntityGenerator.GeneratorMethod
         /// <param name="claName">类名</param>       
         private void GetStructureMethod(string claName)
         {
-            this._structure = GeneratorTool.ForwardIndentCodeBlock("\n\n/// <summary>\n/// 默认构造方法.\n/// </summary>\npublic " + GeneratorTool.CapFirstLetter(claName) + "()\n{\n}", 2);
+            this._structure = GeneratorTool.ForwardIndentCodeBlock("\n\n/// <summary>\n/// 默认构造方法.\n/// </summary>\npublic " + GeneratorTool.ChartConversion(claName) + "()\n{\n}", 2);
         }
 
         /// <summary>
