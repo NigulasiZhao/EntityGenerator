@@ -163,7 +163,7 @@
             // 
             // txtOraclePwd
             // 
-            this.txtOraclePwd.Location = new System.Drawing.Point(367, 55);
+            this.txtOraclePwd.Location = new System.Drawing.Point(507, 57);
             this.txtOraclePwd.Name = "txtOraclePwd";
             this.txtOraclePwd.PasswordChar = '#';
             this.txtOraclePwd.Size = new System.Drawing.Size(177, 21);
@@ -180,13 +180,13 @@
             // 
             this.txtOracleServer.Location = new System.Drawing.Point(89, 24);
             this.txtOracleServer.Name = "txtOracleServer";
-            this.txtOracleServer.Size = new System.Drawing.Size(203, 21);
+            this.txtOracleServer.Size = new System.Drawing.Size(718, 21);
             this.txtOracleServer.TabIndex = 4;
             this.txtOracleServer.TextChanged += new System.EventHandler(this.txtOracleServer_TextChanged);
             // 
             // btnOracleConnectDb
             // 
-            this.btnOracleConnectDb.Location = new System.Drawing.Point(583, 53);
+            this.btnOracleConnectDb.Location = new System.Drawing.Point(717, 55);
             this.btnOracleConnectDb.Name = "btnOracleConnectDb";
             this.btnOracleConnectDb.Size = new System.Drawing.Size(90, 23);
             this.btnOracleConnectDb.TabIndex = 3;
@@ -197,7 +197,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(326, 60);
+            this.label7.Location = new System.Drawing.Point(411, 60);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(35, 12);
             this.label7.TabIndex = 2;
