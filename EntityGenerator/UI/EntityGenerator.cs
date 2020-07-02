@@ -520,7 +520,7 @@ namespace EntityGenerator.UI
                                                 (DataTable)this._clasInfo[tabName]))
                 {
                     dotNet.Save(ToolSetting.SavePath,
-                        GeneratorTool.CapFirstLetter(tabName) + ToolSetting.Postfix + ".cs");
+                        GeneratorTool.ChartConversion(tabName) + ToolSetting.Postfix + ".cs");
                 }
 
                 this.pbGeneratorProgress.Increment(1);
