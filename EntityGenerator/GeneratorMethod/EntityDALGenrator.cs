@@ -16,18 +16,10 @@ namespace EntityGenerator.GeneratorMethod
     {
         //以下声明代表了实体类的各个部分.
         private string _classHeader;
-        //private ArrayList _fieldList = new ArrayList();
-        //private string _structure;
-        //private string _struWithParams;
-        //private ArrayList _attrList = new ArrayList();
         private string _classEnder;
-
+        private ArrayList _methods = new ArrayList();
         //下面变量代表了自定义制表符.
         private string _tab = GeneratorTool.GetTabSymbol();
-
-
-        private ArrayList _methods = new ArrayList();
-
         /// <summary>
         /// 构造方法.
         /// </summary>
@@ -40,13 +32,9 @@ namespace EntityGenerator.GeneratorMethod
         {
             claName = GeneratorTool.ChartConversion(GeneratorTool.FormatTableOrFieldName(claName) + ToolSetting.Postfix);
             this.GetClassHeader(namespaceName, refList, claName, claRemark);
-            //this.GetFieldList(fieldInfo);
-            //this.GetAttrList(fieldInfo);
             this.CURD(claName, claRemark, fieldInfo);
             this.GetClassEnder();
-
         }
-
         /// <summary>
         /// 保存实体类.
         /// </summary>
@@ -64,33 +52,22 @@ namespace EntityGenerator.GeneratorMethod
                 {
                     Directory.CreateDirectory(path);
                 }
-
                 //若文件已存在,则删除之.
                 if (File.Exists(path + @"\" + fileName))
                 {
                     File.Delete(path + @"\" + fileName);
                 }
-
                 //创建文件并得到文件流对象.
                 FileStream str = new FileStream(path + @"\" + fileName, FileMode.Create);
-
                 //得到写入流对象.
                 StreamWriter stream = new StreamWriter(str, System.Text.Encoding.UTF8);
-
                 //将实体类的内容写到文件流中.
                 stream.Write(this._classHeader);
                 foreach (object field in this._methods)
                 {
                     stream.Write(field.ToString());
                 }
-                // stream.Write(this._structure);
-                // stream.Write(this._struWithParams);
-                //foreach (object attr in this._attrList)
-                //{
-                //    stream.Write(attr.ToString());
-                //}
                 stream.Write(this._classEnder);
-
                 //清空并关闭流对象.
                 stream.Flush();
                 stream.Close();
@@ -102,7 +79,6 @@ namespace EntityGenerator.GeneratorMethod
             }
             return succ;
         }
-
         /// <summary>
         /// 得到.Net实体类的类头.
         /// </summary>
@@ -128,82 +104,6 @@ namespace EntityGenerator.GeneratorMethod
             str += "\n" + this._tab + "public class " + claName + "DAL:I" + claName + "DAL\n{\n";
             this._classHeader = str;
         }
-
-        /// <summary>
-        /// 得到.Net实体类的字段代码列表.
-        /// </summary>
-        /// <param name="fieldInfo">字段信息表</param>
-        //private void GetFieldList(DataTable fieldInfo)
-        //{
-        //    Field field = new Field();
-        //    for (int i = 0; i < fieldInfo.Rows.Count; i++)
-        //    {
-        //        field.name = GeneratorTool.FormatTableOrFieldName(fieldInfo.Rows[i][0].ToString());
-        //        field.type = fieldInfo.Rows[i][1].ToString();
-        //        field.remark = fieldInfo.Rows[i][2].ToString();
-        //        //this._fieldList.Add(this.GetFieldItem(field));
-        //    }
-        //}
-
-        /// <summary>
-        /// 得到.Net实体类的属性列表．
-        /// </summary>
-        /// <param name="fieldInfo">字段信息表</param>
-        //private void GetAttrList(DataTable fieldInfo)
-        //{
-        //    Field field = new Field();
-        //    for (int i = 0; i < fieldInfo.Rows.Count; i++)
-        //    {
-        //        field.name = GeneratorTool.ChartConversion(GeneratorTool.FormatTableOrFieldName(fieldInfo.Rows[i][0].ToString()));
-        //        field.type = fieldInfo.Rows[i][1].ToString();
-        //        field.remark = fieldInfo.Rows[i][2].ToString();
-        //        field.constrainttype = fieldInfo.Rows[i][3].ToString();
-        //        this._attrList.Add(this.GetAttrItem(field));
-        //    }
-        //}
-
-        ///// <summary>
-        ///// 根据某个字段信息,得到.Net字段项的代码.
-        ///// </summary>
-        ///// <param name="field">字段信息</param>
-        ///// <returns>字段项代码</returns>
-        //private string GetFieldItem(Field field)
-        //{
-        //    string fieldName = GeneratorTool.CS_FormatFieldName(field.name);
-        //    return GeneratorTool.ForwardIndentCodeBlock("\nprivate " + field.type + " " + fieldName + ";", 2);
-        //}
-
-        /// <summary>
-        /// 根据某个字段信息,得到.Net属性项的代码.
-        /// </summary>
-        /// <param name="field">字段信息</param>
-        /// <returns>属性项代码</returns>
-        //private string GetAttrItem(Field field)
-        //{
-        //    string fieldName = GeneratorTool.CS_FormatFieldName(field.name);
-        //    string attrName = GeneratorTool.CS_FormatAttributeName(field.name);
-        //    string result = string.Empty;
-        //    if (field.constrainttype.Contains("P"))
-        //    {
-        //        string PrimaryKeyType = string.Empty;
-        //        if (field.type == "int")
-        //        {
-        //            PrimaryKeyType = "Identity";
-        //        }
-        //        else if (field.type == "string")
-        //        {
-        //            PrimaryKeyType = "Guid";
-        //        }
-        //        result = "\n\n/// <summary>\n///" + field.remark + "\n/// </summary>\n[DataMember]\n[Column(FilterType = FilterType.IsPrimaryKey, PrimaryKeyType = PrimaryKeyType." + PrimaryKeyType + ")]\npublic " + field.type + " " + attrName + "{\tget;\tset;\t}";
-        //    }
-        //    else
-        //    {
-        //        result = "\n\n/// <summary>\n///" + field.remark + "\n/// </summary>\n[DataMember]\npublic " + field.type + " " + attrName + "{\tget;\tset;\t}";
-        //    }
-        //    result = Regex.Replace(result, "\t", this._tab);
-        //    return GeneratorTool.ForwardIndentCodeBlock(result, 2);
-        //}
-
         /// <summary>
         /// 得到实体的尾部代码.
         /// </summary>
@@ -211,7 +111,6 @@ namespace EntityGenerator.GeneratorMethod
         {
             this._classEnder = "\n" + this._tab + "}\n}";
         }
-
         /// <summary>
         /// 本方法用于格式化类注释.
         /// </summary>
@@ -316,8 +215,6 @@ namespace EntityGenerator.GeneratorMethod
             this._methods = null;
             this._classEnder = null;
             this._classHeader = null;
-            //this._fieldList = null;
-            //this._structure = null;
         }
     }
 }
