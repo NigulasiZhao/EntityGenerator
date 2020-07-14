@@ -516,6 +516,8 @@ namespace EntityGenerator.UI
             this.lblIsGenerating.Visible = true; ;
             this.pbGeneratorProgress.Visible = true;
 
+
+            bool DalCheck = this.DalcheckBox.Checked;
             //生成实体类.
             foreach (object item in checkedItems)
             {
@@ -532,7 +534,10 @@ namespace EntityGenerator.UI
                     dotNet.Save(ToolSetting.SavePath,
                         GeneratorTool.ChartConversion(tabName) + ToolSetting.Postfix + ".cs");
                 }
+                if (DalCheck)
+                {
 
+                }
                 this.pbGeneratorProgress.Increment(1);
             }
 

@@ -76,6 +76,7 @@
             this.lblDotNetPostfix = new System.Windows.Forms.Label();
             this.fbdSavePath = new System.Windows.Forms.FolderBrowserDialog();
             this.ofdSelectAccessDbFile = new System.Windows.Forms.OpenFileDialog();
+            this.DalcheckBox = new System.Windows.Forms.CheckBox();
             this.tbcMain.SuspendLayout();
             this.tbpFromDB.SuspendLayout();
             this.gpbOracle.SuspendLayout();
@@ -102,6 +103,7 @@
             // 
             // tbpFromDB
             // 
+            this.tbpFromDB.Controls.Add(this.DalcheckBox);
             this.tbpFromDB.Controls.Add(this.lblIsGenerating);
             this.tbpFromDB.Controls.Add(this.lblTabStructure);
             this.tbpFromDB.Controls.Add(this.gpbOracle);
@@ -233,7 +235,7 @@
             // 
             // btnGeneratedFromDb
             // 
-            this.btnGeneratedFromDb.Location = new System.Drawing.Point(703, 449);
+            this.btnGeneratedFromDb.Location = new System.Drawing.Point(757, 448);
             this.btnGeneratedFromDb.Name = "btnGeneratedFromDb";
             this.btnGeneratedFromDb.Size = new System.Drawing.Size(113, 29);
             this.btnGeneratedFromDb.TabIndex = 10;
@@ -574,6 +576,16 @@
             this.ofdSelectAccessDbFile.InitialDirectory = "c:/";
             this.ofdSelectAccessDbFile.Title = "请选择Access数据库文件";
             // 
+            // DalcheckBox
+            // 
+            this.DalcheckBox.AutoSize = true;
+            this.DalcheckBox.Location = new System.Drawing.Point(639, 455);
+            this.DalcheckBox.Name = "DalcheckBox";
+            this.DalcheckBox.Size = new System.Drawing.Size(102, 16);
+            this.DalcheckBox.TabIndex = 15;
+            this.DalcheckBox.Text = "生成DAL及IDAL";
+            this.DalcheckBox.UseVisualStyleBackColor = true;
+            // 
             // EntityGenerator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -652,6 +664,7 @@
         private System.Windows.Forms.Label lblTabList;
         private System.Windows.Forms.ProgressBar pbGeneratorProgress;
         private System.Windows.Forms.Label lblIsGenerating;
+        private System.Windows.Forms.CheckBox DalcheckBox;
     }
 }
 
