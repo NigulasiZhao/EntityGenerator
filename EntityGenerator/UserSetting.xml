@@ -19,7 +19,15 @@
     <item>using Dapper;</item>
     <item>using GisPlateform.Model.BaseEntity;</item>
     <item>using GisPlateformForCore.Database;</item>
+    <item>using System.Linq;</item>
   </DALReferences>
+  <IDALReferences>
+    <item>using GisPlateform.IDAL;</item>
+    <item>using GisPlateform.Model;</item>
+    <item>using GisPlateform.Model.BaseEntity;</item>
+    <item>using GisPlateformForCore.Model.Plan;</item>
+    <item>using System.Collections.Generic;</item>
+  </IDALReferences>
   <DataTypeMapping>
     <SqlServer>
       <item>

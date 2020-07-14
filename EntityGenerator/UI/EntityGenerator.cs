@@ -381,7 +381,7 @@ namespace EntityGenerator.UI
                 {
                     this._clasRemarkInfo.Add(tabName, "");
                 }
-                
+
             }
             DataTable data = (DataTable)this._clasInfo[tabName];
             this.dgvTableOrViewStructure.DataSource = data;
@@ -545,6 +545,16 @@ namespace EntityGenerator.UI
                     {
                         dotNet.Save(ToolSetting.SavePath,
                             GeneratorTool.ChartConversion(tabName) + ToolSetting.Postfix + "DAL.cs");
+                    }
+                    using (EntityIDALGenrator dotNet =
+                        new EntityIDALGenrator(namespaceName,
+                                                ToolSetting.IDALReferences,
+                                                tabName,
+                                                this._clasRemarkInfo[tabName].ToString(),
+                                                (DataTable)this._clasInfo[tabName]))
+                    {
+                        dotNet.Save(ToolSetting.SavePath,
+                            "I" + GeneratorTool.ChartConversion(tabName) + ToolSetting.Postfix + "DAL.cs");
                     }
                 }
                 this.pbGeneratorProgress.Increment(1);
