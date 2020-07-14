@@ -168,6 +168,23 @@ namespace EntityGenerator.GeneratorMethod
             //将字符串中的过多的下划线用一个代替.
             return Regex.Replace(temp, "_+", "_");
         }
+
+        /// <summary>
+        /// 得DAL的文件头注释.
+        /// </summary>
+        /// <param name="classKind">实体类的类型</param>
+        /// <returns>文件头注释</returns>
+        public static string GetEntityDALHeader()
+        {
+            //组织并返回文件头注释.
+            return @"/**********************************************
+** Class_Kind:      DotNet Entity DAL
+** Creater:         Entity DAL Generator
+** Create Date:     " + DateTime.Now.ToString() + @"
+** Description:     Entity DAL
+** Version:         Entity DAL Generator 1.0.0
+**********************************************/";
+        }
     }
 }
 

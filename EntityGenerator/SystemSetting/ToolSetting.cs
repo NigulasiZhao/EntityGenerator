@@ -14,6 +14,7 @@ namespace EntityGenerator.SystemSetting
         private static string _language;
         private static string _postfix;
         private static string[] _references;
+        private static string[] _dalreferences;
         private static int _tabsize;
         private static string _savePath;
         private static string _serviceName;
@@ -47,6 +48,7 @@ namespace EntityGenerator.SystemSetting
                 ToolSetting._userName = settings.SelectSingleNode("/Setting/UserName").InnerText;
                 ToolSetting._userPassWord = settings.SelectSingleNode("/Setting/UserPassWord").InnerText;
                 ToolSetting._references = ToolSetting.GetReferences(settings);
+                ToolSetting._dalreferences = ToolSetting.GetDALReferences(settings);
                 ToolSetting._sqlDataMapping = ToolSetting.GetDataTypeMapping(settings, "SqlServer");
                 ToolSetting._accessDataMapping = ToolSetting.GetDataTypeMapping(settings, "Access");
                 ToolSetting._oracleDataMapping = ToolSetting.GetDataTypeMapping(settings, "Oracle");
@@ -235,7 +237,17 @@ namespace EntityGenerator.SystemSetting
                 ToolSetting._references = value;
             }
         }
-
+        public static string[] DALReferences
+        {
+            get
+            {
+                return ToolSetting._dalreferences;
+            }
+            set
+            {
+                ToolSetting._dalreferences = value;
+            }
+        }
         /// <summary>
         /// 获取或设置SqlServer数据库的数据类型映射信息.
         /// </summary>
@@ -308,7 +320,16 @@ namespace EntityGenerator.SystemSetting
             }
             return refes;
         }
-
+        private static string[] GetDALReferences(XmlDocument doc)
+        {
+            XmlNodeList nodes = doc.SelectNodes("/Setting/DALReferences/item");
+            string[] refes = new string[nodes.Count];
+            for (int i = 0; i < nodes.Count; i++)
+            {
+                refes[i] = nodes[i].InnerText;
+            }
+            return refes;
+        }
         /// <summary>
         /// 本方法可以得到配置文件中的数据类型映射信息.
         /// </summary>

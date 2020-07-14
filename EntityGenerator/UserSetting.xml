@@ -11,6 +11,15 @@
     <item>using System.Text;</item>
     <item>using GisPlateform.Model.AttributePack;</item>
   </References>
+  <DALReferences>
+    <item>using System;</item>
+    <item>using System.Collections.Generic;</item>
+    <item>using System.Reflection;</item>
+    <item>using System.Text;</item>
+    <item>using Dapper;</item>
+    <item>using GisPlateform.Model.BaseEntity;</item>
+    <item>using GisPlateformForCore.Database;</item>
+  </DALReferences>
   <DataTypeMapping>
     <SqlServer>
       <item>

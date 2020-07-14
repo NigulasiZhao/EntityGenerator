@@ -536,7 +536,16 @@ namespace EntityGenerator.UI
                 }
                 if (DalCheck)
                 {
-
+                    using (EntityDALGenrator dotNet =
+                        new EntityDALGenrator(namespaceName,
+                                                ToolSetting.DALReferences,
+                                                tabName,
+                                                this._clasRemarkInfo[tabName].ToString(),
+                                                (DataTable)this._clasInfo[tabName]))
+                    {
+                        dotNet.Save(ToolSetting.SavePath,
+                            GeneratorTool.ChartConversion(tabName) + ToolSetting.Postfix + "DAL.cs");
+                    }
                 }
                 this.pbGeneratorProgress.Increment(1);
             }
