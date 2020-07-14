@@ -273,7 +273,7 @@ namespace EntityGenerator.UI
              * ***/
             ToolSetting.SaveUserSetting();
             //得到数据库参数.
-            
+
 
             //相关验证.
             if (server.Equals("") || uid.Equals(""))
@@ -371,7 +371,17 @@ namespace EntityGenerator.UI
                                (ConnectOracle.GetTableOrViewStructure(tabName));
                 ConnectOracle.CloseConnection();
                 this._clasInfo.Add(tabName, tabStructure);
-                this._clasRemarkInfo.Add(tabName, "");
+                DataTable tabNameDt = ConnectOracle.GetDataTable(String.Format(@"select COMMENTS from user_tab_comments WHERE TABLE_NAME = '{0}'", tabName));
+                if (tabNameDt.Rows.Count > 0)
+                {
+                    this._clasRemarkInfo.Add(tabName, tabNameDt.Rows[0]["COMMENTS"].ToString());
+
+                }
+                else
+                {
+                    this._clasRemarkInfo.Add(tabName, "");
+                }
+                
             }
             DataTable data = (DataTable)this._clasInfo[tabName];
             this.dgvTableOrViewStructure.DataSource = data;
