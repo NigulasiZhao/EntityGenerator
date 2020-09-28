@@ -106,7 +106,7 @@ namespace EntityGenerator.GeneratorMethod
             }
             str += "\nnamespace " + namespaceName + "\n{\n";
 
-            str += GeneratorTool.ForwardIndentCodeBlock(this.FormatClassRemark(claRemark + "Controller层"), 1);
+            str += GeneratorTool.ForwardIndentCodeBlock(this.FormatClassRemark(claRemark + "接口层"), 1);
             str += "\n" + this._tab + "public class " + claName.Replace("_", "") + "Controller:BaseController\n{\n";
             str += "\n" + this._tab + "private readonly " + _classdal + " " + _classidal + ";\n";
             str += "\n" + this._tab + "public " + claName.Replace("_", "") + "Controller(" + _classdal + " " + _classnodal + ")\n{\n";
@@ -170,7 +170,7 @@ namespace EntityGenerator.GeneratorMethod
         private string GetDeleteMethods(string claName, string claRemark)
         {
 
-            string DeleteSql = "/// <summary>\n/// 删除" + claRemark + "\n/// </summary>\n/// <param name=\"ID\">主键ID</param>\n/// <returns></returns>\npublic MessageEntity Delete(string ID)\n{\nvar modeInfo = " + _classidal + ".GetInfo(ID);\nreturn " + _classidal + ".Delete(modeInfo);\n }\n";
+            string DeleteSql = "/// <summary>\n/// 删除" + claRemark + "\n/// </summary>\n/// <param name=\"ID\">主键ID</param>\n/// <returns></returns>\n[HttpDelete]\npublic MessageEntity Delete(string ID)\n{\nvar modeInfo = " + _classidal + ".GetInfo(ID);\nreturn " + _classidal + ".Delete(modeInfo);\n }\n";
             return DeleteSql;
         }
         ///// <summary>
