@@ -12,11 +12,14 @@ using System.Windows.Forms;
 
 namespace EntityGenerator.GeneratorMethod
 {
-    class EntityDALGenrator : System.IDisposable
+    class ControllerGenrator : System.IDisposable
     {
         //以下声明代表了实体类的各个部分.
         private string _classHeader;
         private string _classEnder;
+        private string _classdal;
+        private string _classidal;
+        private string _classnodal;
         private ArrayList _methods = new ArrayList();
         //下面变量代表了自定义制表符.
         private string _tab = GeneratorTool.GetTabSymbol();
@@ -28,9 +31,12 @@ namespace EntityGenerator.GeneratorMethod
         /// <param name="claName">类名</param>
         /// <param name="claRemark">类注释</param>
         /// <param name="fieldInfo">字段信息表</param>
-        public EntityDALGenrator(string namespaceName, string[] refList, string claName, string claRemark, DataTable fieldInfo)
+        public ControllerGenrator(string namespaceName, string[] refList, string claName, string claRemark, DataTable fieldInfo)
         {
             claName = GeneratorTool.ChartConversion(GeneratorTool.FormatTableOrFieldName(claName) + ToolSetting.Postfix);
+            _classdal = "I" + claName + "DAL";
+            _classidal = "_i" + claName + "DAL";
+            _classnodal = "i" + claName + "DAL";
             this.GetClassHeader(namespaceName, refList, claName, claRemark);
             this.CURD(claName, claRemark, fieldInfo);
             this.GetClassEnder();
@@ -100,8 +106,11 @@ namespace EntityGenerator.GeneratorMethod
             }
             str += "\nnamespace " + namespaceName + "\n{\n";
 
-            str += GeneratorTool.ForwardIndentCodeBlock(this.FormatClassRemark(claRemark + "DAL层"), 1);
-            str += "\n" + this._tab + "public class " + claName + "DAL:I" + claName + "DAL\n{\n";
+            str += GeneratorTool.ForwardIndentCodeBlock(this.FormatClassRemark(claRemark + "Controller层"), 1);
+            str += "\n" + this._tab + "public class " + claName.Replace("_", "") + "Controller:BaseController\n{\n";
+            str += "\n" + this._tab + "private readonly " + _classdal + " " + _classidal + ";\n";
+            str += "\n" + this._tab + "public " + claName.Replace("_", "") + "Controller(" + _classdal + " " + _classnodal + ")\n{\n";
+            str += "\n" + this._tab + _classidal + " = " + _classnodal + ";\n}\n";
             this._classHeader = str;
         }
         /// <summary>
@@ -127,7 +136,6 @@ namespace EntityGenerator.GeneratorMethod
             this._methods.Add(this.GetAddMethods(claName, claRemark));
             this._methods.Add(this.GetUpdateMethods(claName, claRemark));
             this._methods.Add(this.GetDeleteMethods(claName, claRemark));
-            this._methods.Add(this.GetInfoMethods(claName, claRemark, fieldInfo));
             this._methods.Add(this.GetListMethods(claName, claRemark, fieldInfo));
 
         }
@@ -139,7 +147,7 @@ namespace EntityGenerator.GeneratorMethod
         /// <returns></returns>
         private string GetAddMethods(string claName, string claRemark)
         {
-            string AddSql = "/// <summary>\n/// 添加" + claRemark + "\n/// </summary>\n/// <param name=\"model\">模型</param>\n/// <returns></returns>\npublic MessageEntity Add(" + claName + " model)\n{\nusing (var conn = ConnectionFactory.GetDBConn(ConnectionFactory.DBConnNames.ORCL))\n{\nStringBuilder SqlInsertEqu = new StringBuilder();\nvar rows = 0;\nvar insertSql = DapperExtentions.MakeInsertSql(model);\nif (string.IsNullOrEmpty(insertSql))\n{\nreturn MessageEntityTool.GetMessage(ErrorType.SqlError, \"请检查实体类\");\n}\ntry\n{\nrows = conn.Execute(insertSql, model);\nreturn MessageEntityTool.GetMessage(rows);\n}\ncatch (Exception e)\n{\nreturn MessageEntityTool.GetMessage(ErrorType.SqlError, e.Message);\n}\n}\n}\n";
+            string AddSql = "/// <summary>\n/// 添加" + claRemark + "\n/// </summary>\n/// <param name=\"model\">模型</param>\n/// <returns></returns>\n [HttpPost] \n public MessageEntity Add([FromBody]" + claName + " model)\n{\nif (model == null)\n{\nreturn MessageEntityTool.GetMessage(ErrorType.FieldError);\n}\nvar result = " + _classidal + ".Add(model);\nreturn result;\n}\n";
             return AddSql;
         }
         /// <summary>
@@ -150,7 +158,7 @@ namespace EntityGenerator.GeneratorMethod
         /// <returns></returns>
         private string GetUpdateMethods(string claName, string claRemark)
         {
-            string UpdateSql = "/// <summary>\n///修改" + claRemark + "\n/// </summary>\n/// <param name=\"model\">模型</param>\n/// <returns></returns>\npublic MessageEntity Update(" + claName + " model)\n{\nusing (var conn = ConnectionFactory.GetDBConn(ConnectionFactory.DBConnNames.ORCL))\n{\nvar rows = 0;\nvar insertSql = DapperExtentions.MakeUpdateSql(model);\nif (string.IsNullOrEmpty(insertSql))\n{\nreturn MessageEntityTool.GetMessage(ErrorType.SqlError, \"请检查实体类\");\n}\ntry\n{\nrows = conn.Execute(insertSql, model);\nreturn MessageEntityTool.GetMessage(rows);\n}\ncatch (Exception e)\n{\nreturn MessageEntityTool.GetMessage(ErrorType.SqlError, e.Message);\n}\n}\n}\n";
+            string UpdateSql = "/// <summary>\n///修改" + claRemark + "\n/// </summary>\n/// <param name=\"ID\">主键ID(Id)</param>\n/// <param name=\"value\"></param>\n/// <returns></returns>\n [HttpPut] \n public MessageEntity Put(string ID, [FromBody] " + claName + " value)\n{\nif (value == null)\n{\nreturn MessageEntityTool.GetMessage(ErrorType.FieldError);\n}\nvalue.Id = ID;\nreturn " + _classidal + ".Update(value);\n}\n";
             return UpdateSql;
         }
         /// <summary>
@@ -162,17 +170,40 @@ namespace EntityGenerator.GeneratorMethod
         private string GetDeleteMethods(string claName, string claRemark)
         {
 
-            string DeleteSql = "/// <summary>\n/// 删除" + claRemark + "\n/// </summary>\n/// <param name=\"model\">模型</param>\n/// <returns></returns>\npublic MessageEntity Delete(" + claName + " model)\n{\nusing (var conn = ConnectionFactory.GetDBConn(ConnectionFactory.DBConnNames.ORCL))\n{\nvar rows = 0;\nvar excSql = DapperExtentions.MakeDeleteSql(model);\nif (string.IsNullOrEmpty(excSql))\n{\nreturn MessageEntityTool.GetMessage(ErrorType.SqlError, \"请检查实体类\");\n}\ntry\n{\nrows = conn.Execute(excSql, model);\nreturn MessageEntityTool.GetMessage(rows);\n}\ncatch (Exception e)\n{\nreturn MessageEntityTool.GetMessage(ErrorType.SqlError, e.Message);\n}\n}\n}\n";
+            string DeleteSql = "/// <summary>\n/// 删除" + claRemark + "\n/// </summary>\n/// <param name=\"ID\">主键ID</param>\n/// <returns></returns>\npublic MessageEntity Delete(string ID)\n{\nvar modeInfo = " + _classidal + ".GetInfo(ID);\nreturn " + _classidal + ".Delete(modeInfo);\n }\n";
             return DeleteSql;
         }
+        ///// <summary>
+        ///// 获取单个实体方法
+        ///// </summary>
+        ///// <param name="claName"></param>
+        ///// <param name="claRemark"></param>
+        ///// <param name="fieldInfo"></param>
+        ///// <returns></returns>
+        //private string GetInfoMethods(string claName, string claRemark, DataTable fieldInfo)
+        //{
+        //    string PKey = "";
+        //    Field field = new Field();
+        //    for (int i = 0; i < fieldInfo.Rows.Count; i++)
+        //    {
+        //        field.constrainttype = fieldInfo.Rows[i][3].ToString();
+        //        if (field.constrainttype.Contains("P"))
+        //        {
+        //            PKey = GeneratorTool.ChartConversion(GeneratorTool.FormatTableOrFieldName(fieldInfo.Rows[i][0].ToString()));
+        //        }
+        //    }
+        //    string GetInfoSql = "/// <summary>\n/// 根据ID获取" + claRemark + "\n/// </summary>\n/// <param name=\"ID\"></param>\n/// <returns></returns>\npublic " + claName + " GetInfo(string ID)\n{\nList<" + claName + "> _ListField = new List<" + claName + ">();\nusing (var conn = ConnectionFactory.GetDBConn(ConnectionFactory.DBConnNames.ORCL))\n{\n_ListField = conn.Query<" + claName + ">(\"select * from " + claName + " t where " + PKey + "='\" + ID + \"'\").ToList();\n}\nif (_ListField.Count > 0)\n{\nreturn _ListField[0];\n}\nelse\n{\nreturn null;\n}\n}\n";
+        //    return GetInfoSql;
+
+        //}
         /// <summary>
-        /// 获取单个实体方法
+        /// 获取list方法
         /// </summary>
         /// <param name="claName"></param>
         /// <param name="claRemark"></param>
         /// <param name="fieldInfo"></param>
         /// <returns></returns>
-        private string GetInfoMethods(string claName, string claRemark, DataTable fieldInfo)
+        private string GetListMethods(string claName, string claRemark, DataTable fieldInfo)
         {
             string PKey = "";
             Field field = new Field();
@@ -184,26 +215,7 @@ namespace EntityGenerator.GeneratorMethod
                     PKey = GeneratorTool.ChartConversion(GeneratorTool.FormatTableOrFieldName(fieldInfo.Rows[i][0].ToString()));
                 }
             }
-            string GetInfoSql = "/// <summary>\n/// 根据ID获取" + claRemark + "\n/// </summary>\n/// <param name=\"ID\"></param>\n/// <returns></returns>\npublic " + claName + " GetInfo(string ID)\n{\nList<" + claName + "> _ListField = new List<" + claName + ">();\nusing (var conn = ConnectionFactory.GetDBConn(ConnectionFactory.DBConnNames.ORCL))\n{\n_ListField = conn.Query<" + claName + ">(\"select * from " + claName + " t where " + PKey + "='\" + ID + \"'\").ToList();\n}\nif (_ListField.Count > 0)\n{\nreturn _ListField[0];\n}\nelse\n{\nreturn null;\n}\n}\n";
-            return GetInfoSql;
-
-        }
-        /// <summary>
-        /// 获取list方法
-        /// </summary>
-        /// <param name="claName"></param>
-        /// <param name="claRemark"></param>
-        /// <param name="fieldInfo"></param>
-        /// <returns></returns>
-        private string GetListMethods(string claName, string claRemark, DataTable fieldInfo)
-        {
-            StringBuilder Fileds = new StringBuilder("");
-            for (int i = 0; i < fieldInfo.Rows.Count; i++)
-            {
-                Fileds.Append(GeneratorTool.ChartConversion(GeneratorTool.FormatTableOrFieldName(fieldInfo.Rows[i][0].ToString())) + ",");
-            }
-            string Filed = Fileds.ToString().TrimEnd(',');
-            string GetListSql = "/// <summary>\n/// 获得" + claRemark + "列表\n/// </summary>\n/// <param name=\"parInfo\">参数信息</param>/// <param name=\"sort\">排序字段</param>\n/// <param name=\"ordering\">升序/降序</param>/// <param name=\"num\">当前页</param>/// <param name=\"page\">每页数据行数</param>\n/// <returns></returns>\npublic MessageEntity GetList(List<ParameterInfo> parInfo, string sort, string ordering, int num, int page, string sqlCondition)\n{string sql = @\"   select " + Filed + " from " + claName + " ipc \n\" + sqlCondition;\nvar ResultList = DapperExtentions.EntityForSqlToPager<" + claName + ">(sql, sort, ordering, num, page, out MessageEntity result, ConnectionFactory.DBConnNames.ORCL);\nreturn result;\n}\n";
+            string GetListSql = "/// <summary>\n/// 获得" + claRemark + "列表\n/// </summary>\n/// <param name=\"ParInfo\">参数信息</param>\n/// <param name=\"sort\">排序字段</param>\n/// <param name=\"ordering\">升序/降序</param>\n/// <param name=\"num\">当前页</param>\n/// <param name=\"page\">每页数据行数</param>\n/// <returns></returns>\n[HttpGet]\n public MessageEntity GetList(string ParInfo, string sort = \"" + PKey + "\", string ordering = \"desc\", int num = 20, int page = 1)\n{\nList<ParameterInfo> list = JsonConvert.DeserializeObject<List<ParameterInfo>>(ParInfo);\nSqlCondition sqlWhere = new SqlCondition();\nstring sqlCondition = sqlWhere.getParInfo(list);\nvar result = " + _classidal + ".GetList(list, sort, ordering, num, page, sqlCondition);\n return result;\n}\n";
             return GetListSql;
         }
         #endregion

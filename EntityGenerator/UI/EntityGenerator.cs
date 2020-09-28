@@ -556,6 +556,16 @@ namespace EntityGenerator.UI
                         dotNet.Save(ToolSetting.SavePath,
                             "I" + GeneratorTool.ChartConversion(tabName) + ToolSetting.Postfix + "DAL.cs");
                     }
+                    using (ControllerGenrator dotNet =
+                        new ControllerGenrator(namespaceName,
+                                                ToolSetting.ControllerReferences,
+                                                tabName,
+                                                this._clasRemarkInfo[tabName].ToString(),
+                                                (DataTable)this._clasInfo[tabName]))
+                    {
+                        dotNet.Save(ToolSetting.SavePath,
+                            GeneratorTool.ChartConversion(tabName.Replace("_", "")) + ToolSetting.Postfix + "Controller.cs");
+                    }
                 }
                 this.pbGeneratorProgress.Increment(1);
             }

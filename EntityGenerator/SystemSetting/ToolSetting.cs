@@ -16,6 +16,7 @@ namespace EntityGenerator.SystemSetting
         private static string[] _references;
         private static string[] _dalreferences;
         private static string[] _idalreferences;
+        private static string[] _controllerReferences;
         private static int _tabsize;
         private static string _savePath;
         private static string _serviceName;
@@ -51,6 +52,7 @@ namespace EntityGenerator.SystemSetting
                 ToolSetting._references = ToolSetting.GetReferences(settings);
                 ToolSetting._dalreferences = ToolSetting.GetDALReferences(settings);
                 ToolSetting._idalreferences = ToolSetting.GetIDALReferences(settings);
+                ToolSetting._controllerReferences = ToolSetting.GetControllerReferences(settings);
                 ToolSetting._sqlDataMapping = ToolSetting.GetDataTypeMapping(settings, "SqlServer");
                 ToolSetting._accessDataMapping = ToolSetting.GetDataTypeMapping(settings, "Access");
                 ToolSetting._oracleDataMapping = ToolSetting.GetDataTypeMapping(settings, "Oracle");
@@ -261,6 +263,17 @@ namespace EntityGenerator.SystemSetting
                 ToolSetting._idalreferences = value;
             }
         }
+        public static string[] ControllerReferences
+        {
+            get
+            {
+                return ToolSetting._controllerReferences;
+            }
+            set
+            {
+                ToolSetting._controllerReferences = value;
+            }
+        }
         /// <summary>
         /// 获取或设置SqlServer数据库的数据类型映射信息.
         /// </summary>
@@ -346,6 +359,16 @@ namespace EntityGenerator.SystemSetting
         private static string[] GetIDALReferences(XmlDocument doc)
         {
             XmlNodeList nodes = doc.SelectNodes("/Setting/IDALReferences/item");
+            string[] refes = new string[nodes.Count];
+            for (int i = 0; i < nodes.Count; i++)
+            {
+                refes[i] = nodes[i].InnerText;
+            }
+            return refes;
+        }
+        private static string[] GetControllerReferences(XmlDocument doc)
+        {
+            XmlNodeList nodes = doc.SelectNodes("/Setting/ControllerReferences/item");
             string[] refes = new string[nodes.Count];
             for (int i = 0; i < nodes.Count; i++)
             {

@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="DataBaseType\ConnectOracle.cs" />
     <Compile Include="DataBaseType\FieldMethods.cs" />
+    <Compile Include="GeneratorMethod\ControllerGenrator.cs" />
     <Compile Include="GeneratorMethod\EntityClassGenrator.cs" />
     <Compile Include="GeneratorMethod\EntityDALGenrator.cs" />
     <Compile Include="GeneratorMethod\EntityIDALGenrator.cs" />
