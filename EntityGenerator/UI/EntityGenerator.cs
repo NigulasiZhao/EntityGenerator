@@ -518,6 +518,7 @@ namespace EntityGenerator.UI
 
 
             bool DalCheck = this.DalcheckBox.Checked;
+            bool ControllerCheck = this.ControllercheckBox.Checked;
             //生成实体类.
             foreach (object item in checkedItems)
             {
@@ -556,12 +557,15 @@ namespace EntityGenerator.UI
                         dotNet.Save(ToolSetting.SavePath,
                             "I" + GeneratorTool.ChartConversion(tabName) + ToolSetting.Postfix + "DAL.cs");
                     }
+                }
+                if (ControllerCheck)
+                {
                     using (ControllerGenrator dotNet =
-                        new ControllerGenrator(namespaceName,
-                                                ToolSetting.ControllerReferences,
-                                                tabName,
-                                                this._clasRemarkInfo[tabName].ToString(),
-                                                (DataTable)this._clasInfo[tabName]))
+                      new ControllerGenrator(namespaceName,
+                                              ToolSetting.ControllerReferences,
+                                              tabName,
+                                              this._clasRemarkInfo[tabName].ToString(),
+                                              (DataTable)this._clasInfo[tabName]))
                     {
                         dotNet.Save(ToolSetting.SavePath,
                             GeneratorTool.ChartConversion(tabName.Replace("_", "")) + ToolSetting.Postfix + "Controller.cs");

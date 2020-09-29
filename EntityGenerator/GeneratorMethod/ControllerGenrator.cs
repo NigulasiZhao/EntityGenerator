@@ -133,8 +133,8 @@ namespace EntityGenerator.GeneratorMethod
         #region CURD方法构造
         private void CURD(string claName, string claRemark, DataTable fieldInfo)
         {
-            this._methods.Add(this.GetAddMethods(claName, claRemark));
-            this._methods.Add(this.GetUpdateMethods(claName, claRemark));
+            this._methods.Add(this.GetAddMethods(claName, claRemark, fieldInfo));
+            this._methods.Add(this.GetUpdateMethods(claName, claRemark, fieldInfo));
             this._methods.Add(this.GetDeleteMethods(claName, claRemark));
             this._methods.Add(this.GetListMethods(claName, claRemark, fieldInfo));
 
@@ -145,9 +145,14 @@ namespace EntityGenerator.GeneratorMethod
         /// <param name="claName"></param>
         /// <param name="claRemark"></param>
         /// <returns></returns>
-        private string GetAddMethods(string claName, string claRemark)
+        private string GetAddMethods(string claName, string claRemark, DataTable fieldInfo)
         {
-            string AddSql = "/// <summary>\n/// 添加" + claRemark + "\n/// </summary>\n/// <param name=\"model\">模型</param>\n/// <returns></returns>\n [HttpPost] \n public MessageEntity Add([FromBody]" + claName + " model)\n{\nif (model == null)\n{\nreturn MessageEntityTool.GetMessage(ErrorType.FieldError);\n}\nvar result = " + _classidal + ".Add(model);\nreturn result;\n}\n";
+            string Annotation = "";
+            for (int i = 0; i < fieldInfo.Rows.Count; i++)
+            {
+                Annotation += GeneratorTool.ChartConversion(GeneratorTool.FormatTableOrFieldName(fieldInfo.Rows[i][0].ToString())) + ":" + fieldInfo.Rows[i][2].ToString() + ";";
+            }
+            string AddSql = "/// <summary>\n/// 添加" + claRemark + "\n/// </summary>\n/// <param name=\"model\">" + Annotation + "</param>\n/// <returns></returns>\n [HttpPost] \n public MessageEntity Add([FromBody]" + claName + " model)\n{\nif (model == null)\n{\nreturn MessageEntityTool.GetMessage(ErrorType.FieldError);\n}\nvar result = " + _classidal + ".Add(model);\nreturn result;\n}\n";
             return AddSql;
         }
         /// <summary>
@@ -156,9 +161,14 @@ namespace EntityGenerator.GeneratorMethod
         /// <param name="claName"></param>
         /// <param name="claRemark"></param>
         /// <returns></returns>
-        private string GetUpdateMethods(string claName, string claRemark)
+        private string GetUpdateMethods(string claName, string claRemark, DataTable fieldInfo)
         {
-            string UpdateSql = "/// <summary>\n///修改" + claRemark + "\n/// </summary>\n/// <param name=\"ID\">主键ID(Id)</param>\n/// <param name=\"value\"></param>\n/// <returns></returns>\n [HttpPut] \n public MessageEntity Put(string ID, [FromBody] " + claName + " value)\n{\nif (value == null)\n{\nreturn MessageEntityTool.GetMessage(ErrorType.FieldError);\n}\nvalue.Id = ID;\nreturn " + _classidal + ".Update(value);\n}\n";
+            string Annotation = "";
+            for (int i = 0; i < fieldInfo.Rows.Count; i++)
+            {
+                Annotation += GeneratorTool.ChartConversion(GeneratorTool.FormatTableOrFieldName(fieldInfo.Rows[i][0].ToString())) + ":" + fieldInfo.Rows[i][2].ToString() + ";";
+            }
+            string UpdateSql = "/// <summary>\n///修改" + claRemark + "\n/// </summary>\n/// <param name=\"ID\">主键ID(Id)</param>\n/// <param name=\"value\">" + Annotation + "</param>\n/// <returns></returns>\n [HttpPut] \n public MessageEntity Put(string ID, [FromBody] " + claName + " value)\n{\nif (value == null)\n{\nreturn MessageEntityTool.GetMessage(ErrorType.FieldError);\n}\nvalue.Id = ID;\nreturn " + _classidal + ".Update(value);\n}\n";
             return UpdateSql;
         }
         /// <summary>

@@ -32,6 +32,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EntityGenerator));
             this.tbcMain = new System.Windows.Forms.TabControl();
             this.tbpFromDB = new System.Windows.Forms.TabPage();
+            this.DalcheckBox = new System.Windows.Forms.CheckBox();
             this.lblIsGenerating = new System.Windows.Forms.Label();
             this.lblTabStructure = new System.Windows.Forms.Label();
             this.gpbOracle = new System.Windows.Forms.GroupBox();
@@ -76,7 +77,7 @@
             this.lblDotNetPostfix = new System.Windows.Forms.Label();
             this.fbdSavePath = new System.Windows.Forms.FolderBrowserDialog();
             this.ofdSelectAccessDbFile = new System.Windows.Forms.OpenFileDialog();
-            this.DalcheckBox = new System.Windows.Forms.CheckBox();
+            this.ControllercheckBox = new System.Windows.Forms.CheckBox();
             this.tbcMain.SuspendLayout();
             this.tbpFromDB.SuspendLayout();
             this.gpbOracle.SuspendLayout();
@@ -103,6 +104,7 @@
             // 
             // tbpFromDB
             // 
+            this.tbpFromDB.Controls.Add(this.ControllercheckBox);
             this.tbpFromDB.Controls.Add(this.DalcheckBox);
             this.tbpFromDB.Controls.Add(this.lblIsGenerating);
             this.tbpFromDB.Controls.Add(this.lblTabStructure);
@@ -125,6 +127,16 @@
             this.tbpFromDB.Tag = "FromDB";
             this.tbpFromDB.Text = "从数据库";
             this.tbpFromDB.UseVisualStyleBackColor = true;
+            // 
+            // DalcheckBox
+            // 
+            this.DalcheckBox.AutoSize = true;
+            this.DalcheckBox.Location = new System.Drawing.Point(639, 455);
+            this.DalcheckBox.Name = "DalcheckBox";
+            this.DalcheckBox.Size = new System.Drawing.Size(102, 16);
+            this.DalcheckBox.TabIndex = 15;
+            this.DalcheckBox.Text = "生成DAL及IDAL";
+            this.DalcheckBox.UseVisualStyleBackColor = true;
             // 
             // lblIsGenerating
             // 
@@ -239,7 +251,7 @@
             this.btnGeneratedFromDb.Name = "btnGeneratedFromDb";
             this.btnGeneratedFromDb.Size = new System.Drawing.Size(113, 29);
             this.btnGeneratedFromDb.TabIndex = 10;
-            this.btnGeneratedFromDb.Text = "生成实体类(&G)";
+            this.btnGeneratedFromDb.Text = "生成";
             this.btnGeneratedFromDb.UseVisualStyleBackColor = true;
             this.btnGeneratedFromDb.Click += new System.EventHandler(this.btnGeneratedFromDb_Click);
             // 
@@ -576,15 +588,15 @@
             this.ofdSelectAccessDbFile.InitialDirectory = "c:/";
             this.ofdSelectAccessDbFile.Title = "请选择Access数据库文件";
             // 
-            // DalcheckBox
+            // ControllercheckBox
             // 
-            this.DalcheckBox.AutoSize = true;
-            this.DalcheckBox.Location = new System.Drawing.Point(639, 455);
-            this.DalcheckBox.Name = "DalcheckBox";
-            this.DalcheckBox.Size = new System.Drawing.Size(102, 16);
-            this.DalcheckBox.TabIndex = 15;
-            this.DalcheckBox.Text = "生成DAL及IDAL";
-            this.DalcheckBox.UseVisualStyleBackColor = true;
+            this.ControllercheckBox.AutoSize = true;
+            this.ControllercheckBox.Location = new System.Drawing.Point(639, 433);
+            this.ControllercheckBox.Name = "ControllercheckBox";
+            this.ControllercheckBox.Size = new System.Drawing.Size(84, 16);
+            this.ControllercheckBox.TabIndex = 16;
+            this.ControllercheckBox.Text = "生成控制器";
+            this.ControllercheckBox.UseVisualStyleBackColor = true;
             // 
             // EntityGenerator
             // 
@@ -665,6 +677,7 @@
         private System.Windows.Forms.ProgressBar pbGeneratorProgress;
         private System.Windows.Forms.Label lblIsGenerating;
         private System.Windows.Forms.CheckBox DalcheckBox;
+        private System.Windows.Forms.CheckBox ControllercheckBox;
     }
 }
 
