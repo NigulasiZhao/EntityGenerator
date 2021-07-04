@@ -127,6 +127,7 @@
 				<DBType>image</DBType>
 				<CodeType>byte[]</CodeType>
 			</item>
+			
 		</SqlServer>
 		<MSAccess>
 			<item>
@@ -181,6 +182,10 @@
 			</item>
 			<item>
 				<DBType>NVARCHAR2</DBType>
+				<CodeType>string</CodeType>
+			</item>
+			<item>
+				<DBType>ST_GEOMETRY</DBType>
 				<CodeType>string</CodeType>
 			</item>
 		</Oracle>

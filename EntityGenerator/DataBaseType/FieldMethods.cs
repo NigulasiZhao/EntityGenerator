@@ -14,6 +14,8 @@ namespace EntityGenerator.DataBaseType
             fields.Columns.Add("字段类型", typeof(string));
             fields.Columns.Add("注释", typeof(string));
             fields.Columns.Add("是否主键", typeof(string));
+            fields.Columns.Add("数据库字段类型", typeof(string));
+            fields.Columns.Add("字段长度", typeof(int));
             return fields;
         }
     }

@@ -152,7 +152,7 @@ namespace EntityGenerator.GeneratorMethod
             {
                 Annotation += GeneratorTool.ChartConversion(GeneratorTool.FormatTableOrFieldName(fieldInfo.Rows[i][0].ToString())) + ":" + fieldInfo.Rows[i][2].ToString() + ";";
             }
-            string AddSql = "/// <summary>\n/// 添加" + claRemark + "\n/// </summary>\n/// <param name=\"model\">" + Annotation + "</param>\n/// <returns></returns>\n [HttpPost] \n public MessageEntity Add([FromBody]" + claName + " model)\n{\nif (model == null)\n{\nreturn MessageEntityTool.GetMessage(ErrorType.FieldError);\n}\nvar result = " + _classidal + ".Add(model);\nreturn result;\n}\n";
+            string AddSql = "/// <summary>\n/// 添加" + claRemark + "\n/// </summary>\n/// <param name=\"model\">" + Annotation + "</param>\n/// <returns></returns>\n [HttpPost] \n public MessageEntity Post([FromBody]" + claName + " model)\n{\nif (model == null)\n{\nreturn MessageEntityTool.GetMessage(ErrorType.FieldError);\n}\nvar result = " + _classidal + ".Add(model);\nreturn result;\n}\n";
             return AddSql;
         }
         /// <summary>

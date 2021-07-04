@@ -1,4 +1,6 @@
 ﻿using EntityGenerator.SystemSetting;
+using JiebaNet.Segmenter;
+using JiebaNet.Segmenter.Common;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -79,6 +81,8 @@ namespace EntityGenerator.GeneratorMethod
         /// <returns>处理后的字符串</returns>
         public static string CS_FormatAttributeName(string field)
         {
+            var segmenter = new JiebaSegmenter();
+            var freqs = new Counter<string>(segmenter.Cut(field, cutAll: true));
             char firstChar = Char.ToUpper(field[0]);
             StringBuilder strBlder = new StringBuilder(field);
             strBlder[0] = firstChar;

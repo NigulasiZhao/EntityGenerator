@@ -194,13 +194,17 @@ namespace EntityGenerator.DataBaseType
             string fieType = null;
             string comments = null;
             string constrainttype = null;
+            string dbfieType = null;
+            int filedlenth = 0;
             for (int i = 0; i < stru.Rows.Count; i++)
             {
                 fieName = stru.Rows[i][0].ToString();
                 fieType = ToolSetting.GetMapping(SystemSetting.DbType.Oracle, stru.Rows[i][1].ToString());
                 comments = stru.Rows[i]["comments"].ToString();
                 constrainttype = stru.Rows[i]["constraint_type"].ToString();
-                fields.Rows.Add(new object[] { fieName, fieType, comments, constrainttype });
+                dbfieType = stru.Rows[i][1].ToString();
+                filedlenth = string.IsNullOrEmpty(stru.Rows[i]["DATA_LENGTH"].ToString()) ? 0 : Convert.ToInt32(stru.Rows[i]["DATA_LENGTH"].ToString());
+                fields.Rows.Add(new object[] { fieName, fieType, comments, constrainttype, dbfieType, filedlenth });
             }
             return fields;
         }

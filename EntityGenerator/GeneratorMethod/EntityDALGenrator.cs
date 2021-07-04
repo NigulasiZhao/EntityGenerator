@@ -124,8 +124,8 @@ namespace EntityGenerator.GeneratorMethod
         #region CURD方法构造
         private void CURD(string claName, string claRemark, DataTable fieldInfo)
         {
-            this._methods.Add(this.GetAddMethods(claName, claRemark));
-            this._methods.Add(this.GetUpdateMethods(claName, claRemark));
+            this._methods.Add(this.GetAddMethods(claName, claRemark, fieldInfo));
+            this._methods.Add(this.GetUpdateMethods(claName, claRemark, fieldInfo));
             this._methods.Add(this.GetDeleteMethods(claName, claRemark));
             this._methods.Add(this.GetInfoMethods(claName, claRemark, fieldInfo));
             this._methods.Add(this.GetListMethods(claName, claRemark, fieldInfo));
@@ -137,10 +137,56 @@ namespace EntityGenerator.GeneratorMethod
         /// <param name="claName"></param>
         /// <param name="claRemark"></param>
         /// <returns></returns>
-        private string GetAddMethods(string claName, string claRemark)
+        private string GetAddMethods(string claName, string claRemark, DataTable fieldInfo)
         {
-            string AddSql = "/// <summary>\n/// 添加" + claRemark + "\n/// </summary>\n/// <param name=\"model\">模型</param>\n/// <returns></returns>\npublic MessageEntity Add(" + claName + " model)\n{\nusing (var conn = ConnectionFactory.GetDBConn(ConnectionFactory.DBConnNames.ORCL))\n{\nStringBuilder SqlInsertEqu = new StringBuilder();\nvar rows = 0;\nvar insertSql = DapperExtentions.MakeInsertSql(model);\nif (string.IsNullOrEmpty(insertSql))\n{\nreturn MessageEntityTool.GetMessage(ErrorType.SqlError, \"请检查实体类\");\n}\ntry\n{\nrows = conn.Execute(insertSql, model);\nreturn MessageEntityTool.GetMessage(rows);\n}\ncatch (Exception e)\n{\nreturn MessageEntityTool.GetMessage(ErrorType.SqlError, e.Message);\n}\n}\n}\n";
-            return AddSql;
+
+            if (fieldInfo.Select(" 数据库字段类型 = 'CLOB' OR 字段长度 >= 4000").Count() > 0)
+            {
+                string Parame = "";
+                string ParameValue = "";
+                string Filedstr = "";
+                string FiledValue = "";
+                for (int i = 0; i < fieldInfo.Rows.Count; i++)
+                {
+                    //if (fieldInfo.Rows[i]["是否主键"].ToString() == "P")
+                    //{
+                    //    continue;
+                    //}
+                    Filedstr += fieldInfo.Rows[i]["字段名"].ToString() + ",";
+                    if (fieldInfo.Rows[i]["是否主键"].ToString() == "P")
+                    {
+                        FiledValue += "'{Guid.NewGuid().ToString()}',";
+                    }
+                    else if (fieldInfo.Rows[i]["数据库字段类型"].ToString().ToUpper() == "CLOB" || Convert.ToInt32(fieldInfo.Rows[i]["字段长度"].ToString()) >= 4000)
+                    {
+                        Parame += "\n" + fieldInfo.Rows[i]["字段名"].ToString() + " CLOB;";
+                        ParameValue += "\n" + fieldInfo.Rows[i]["字段名"].ToString() + " :='{model." + GeneratorTool.ChartConversion(GeneratorTool.FormatTableOrFieldName(fieldInfo.Rows[i]["字段名"].ToString())) + "}';";
+                        FiledValue += GeneratorTool.ChartConversion(GeneratorTool.FormatTableOrFieldName(fieldInfo.Rows[i]["字段名"].ToString())) + ",";
+                    }
+                    else if (fieldInfo.Rows[i]["数据库字段类型"].ToString().ToUpper() == "NUMBER")
+                    {
+                        FiledValue += "{model." + GeneratorTool.ChartConversion(GeneratorTool.FormatTableOrFieldName(fieldInfo.Rows[i]["字段名"].ToString())) + "},";
+                    }
+                    else if (fieldInfo.Rows[i]["数据库字段类型"].ToString().ToUpper() == "DATE")
+                    {
+                        FiledValue += "to_date('{model." + GeneratorTool.ChartConversion(GeneratorTool.FormatTableOrFieldName(fieldInfo.Rows[i]["字段名"].ToString())) + "}','YYYY-mm-dd HH24:Mi:SS'),";
+                    }
+                    else
+                    {
+                        FiledValue += "'{model." + GeneratorTool.ChartConversion(GeneratorTool.FormatTableOrFieldName(fieldInfo.Rows[i]["字段名"].ToString())) + "}',";
+                    }
+                }
+                Filedstr = Filedstr.TrimEnd(',');
+                FiledValue = FiledValue.TrimEnd(',');
+                string AddSql = "/// <summary>\n/// 添加" + claRemark + "\n/// </summary>\n/// <param name=\"model\">模型</param>\n/// <returns></returns>\npublic MessageEntity Add(" + claName + " model)\n{\nusing (var conn = ConnectionFactory.GetDBConn(ConnectionFactory.DBConnNames.ORCL))\n{\nStringBuilder SqlInsertEqu = new StringBuilder();\nvar rows = 0;\nvar insertSql = $@\"DECLARE\n" + Parame + "\nBEGIN\n" + ParameValue + "\nINSERT INTO " + claName + "(" + Filedstr + ")\nValues(" + FiledValue + ");\nCOMMIT;\nEND;\";\nif (string.IsNullOrEmpty(insertSql))\n{\nreturn MessageEntityTool.GetMessage(ErrorType.SqlError, \"请检查实体类\");\n}\ntry\n{\nrows = conn.Execute(insertSql, model);\nreturn MessageEntityTool.GetMessage(rows);\n}\ncatch (Exception e)\n{\nreturn MessageEntityTool.GetMessage(ErrorType.SqlError, e.Message);\n}\n}\n}\n";
+                return AddSql;
+            }
+            else
+            {
+                string AddSql = "/// <summary>\n/// 添加" + claRemark + "\n/// </summary>\n/// <param name=\"model\">模型</param>\n/// <returns></returns>\npublic MessageEntity Add(" + claName + " model)\n{\nusing (var conn = ConnectionFactory.GetDBConn(ConnectionFactory.DBConnNames.ORCL))\n{\nStringBuilder SqlInsertEqu = new StringBuilder();\nvar rows = 0;\nvar insertSql = DapperExtentions.MakeInsertSql(model);\nif (string.IsNullOrEmpty(insertSql))\n{\nreturn MessageEntityTool.GetMessage(ErrorType.SqlError, \"请检查实体类\");\n}\ntry\n{\nrows = conn.Execute(insertSql, model);\nreturn MessageEntityTool.GetMessage(rows);\n}\ncatch (Exception e)\n{\nreturn MessageEntityTool.GetMessage(ErrorType.SqlError, e.Message);\n}\n}\n}\n";
+                return AddSql;
+            }
+
         }
         /// <summary>
         /// 获取更新方法
@@ -148,10 +194,61 @@ namespace EntityGenerator.GeneratorMethod
         /// <param name="claName"></param>
         /// <param name="claRemark"></param>
         /// <returns></returns>
-        private string GetUpdateMethods(string claName, string claRemark)
+        private string GetUpdateMethods(string claName, string claRemark, DataTable fieldInfo)
         {
-            string UpdateSql = "/// <summary>\n///修改" + claRemark + "\n/// </summary>\n/// <param name=\"model\">模型</param>\n/// <returns></returns>\npublic MessageEntity Update(" + claName + " model)\n{\nusing (var conn = ConnectionFactory.GetDBConn(ConnectionFactory.DBConnNames.ORCL))\n{\nvar rows = 0;\nvar insertSql = DapperExtentions.MakeUpdateSql(model);\nif (string.IsNullOrEmpty(insertSql))\n{\nreturn MessageEntityTool.GetMessage(ErrorType.SqlError, \"请检查实体类\");\n}\ntry\n{\nrows = conn.Execute(insertSql, model);\nreturn MessageEntityTool.GetMessage(rows);\n}\ncatch (Exception e)\n{\nreturn MessageEntityTool.GetMessage(ErrorType.SqlError, e.Message);\n}\n}\n}\n";
-            return UpdateSql;
+            if (fieldInfo.Select(" 数据库字段类型 = 'CLOB' OR 字段长度 >= 4000").Count() > 0)
+            {
+                string Parame = "";
+                string ParameValue = "";
+                //string Filedstr = "";
+                string FiledValue = "";
+                string SqlWhere = " WHERE 1=1 ";
+                for (int i = 0; i < fieldInfo.Rows.Count; i++)
+                {
+                    //Filedstr += fieldInfo.Rows[i]["字段名"].ToString() + ",";
+                    if (fieldInfo.Rows[i]["数据库字段类型"].ToString().ToUpper() == "CLOB" || Convert.ToInt32(fieldInfo.Rows[i]["字段长度"].ToString()) >= 4000)
+                    {
+                        Parame += "\n" + fieldInfo.Rows[i]["字段名"].ToString() + " CLOB;";
+                        ParameValue += "\n" + fieldInfo.Rows[i]["字段名"].ToString() + " :='{model." + GeneratorTool.ChartConversion(GeneratorTool.FormatTableOrFieldName(fieldInfo.Rows[i]["字段名"].ToString())) + "}';";
+                        FiledValue += "T." + fieldInfo.Rows[i]["字段名"].ToString() + "=" + fieldInfo.Rows[i]["字段名"].ToString() + " ,";
+                    }
+                    else if (fieldInfo.Rows[i]["数据库字段类型"].ToString().ToUpper() == "NUMBER")
+                    {
+                        FiledValue += "T." + fieldInfo.Rows[i]["字段名"].ToString() + "={model." + GeneratorTool.ChartConversion(GeneratorTool.FormatTableOrFieldName(fieldInfo.Rows[i]["字段名"].ToString())) + "},";
+                    }
+                    else if (fieldInfo.Rows[i]["数据库字段类型"].ToString().ToUpper() == "DATE")
+                    {
+                        FiledValue += "T." + fieldInfo.Rows[i]["字段名"].ToString() + "=to_date('{model." + GeneratorTool.ChartConversion(GeneratorTool.FormatTableOrFieldName(fieldInfo.Rows[i]["字段名"].ToString())) + "}','YYYY-mm-dd HH24:Mi:SS'),";
+                    }
+                    else
+                    {
+                        FiledValue += "T." + fieldInfo.Rows[i]["字段名"].ToString() + "='{model." + GeneratorTool.ChartConversion(GeneratorTool.FormatTableOrFieldName(fieldInfo.Rows[i]["字段名"].ToString())) + "}',";
+                    }
+                }
+                //Filedstr = Filedstr.TrimEnd(',');
+                FiledValue = FiledValue.TrimEnd(',');
+                DataRow[] dr = fieldInfo.Select(" 是否主键 = 'P'");
+                for (int i = 0; i < dr.Count(); i++)
+                {
+                    if (dr[i]["数据库字段类型"].ToString().ToUpper() == "NUMBER")
+                    {
+                        SqlWhere += " AND T." + dr[i]["字段名"].ToString() + "={model." + GeneratorTool.ChartConversion(GeneratorTool.FormatTableOrFieldName(dr[i]["字段名"].ToString())) + "},";
+                    }
+                    else
+                    {
+                        SqlWhere += " AND T." + dr[i]["字段名"].ToString() + "='{model." + GeneratorTool.ChartConversion(GeneratorTool.FormatTableOrFieldName(dr[i]["字段名"].ToString())) + "}',";
+                    }
+
+                }
+                string UpdateSql = "/// <summary>\n///修改" + claRemark + "\n/// </summary>\n/// <param name=\"model\">模型</param>\n/// <returns></returns>\npublic MessageEntity Update(" + claName + " model)\n{\nusing (var conn = ConnectionFactory.GetDBConn(ConnectionFactory.DBConnNames.ORCL))\n{\nvar rows = 0;\nvar insertSql = \n$@\"DECLARE\n" + Parame + "\nBEGIN\n" + ParameValue + "\nUPDATE " + claName + " T SET \n" + FiledValue + "\n" + SqlWhere + "\nCOMMINT;\nEND;\";\nif (string.IsNullOrEmpty(insertSql))\n{\nreturn MessageEntityTool.GetMessage(ErrorType.SqlError, \"请检查实体类\");\n}\ntry\n{\nrows = conn.Execute(insertSql, model);\nreturn MessageEntityTool.GetMessage(rows);\n}\ncatch (Exception e)\n{\nreturn MessageEntityTool.GetMessage(ErrorType.SqlError, e.Message);\n}\n}\n}\n";
+                return UpdateSql;
+            }
+            else
+            {
+                string UpdateSql = "/// <summary>\n///修改" + claRemark + "\n/// </summary>\n/// <param name=\"model\">模型</param>\n/// <returns></returns>\npublic MessageEntity Update(" + claName + " model)\n{\nusing (var conn = ConnectionFactory.GetDBConn(ConnectionFactory.DBConnNames.ORCL))\n{\nvar rows = 0;\nvar insertSql = DapperExtentions.MakeUpdateSql(model);\nif (string.IsNullOrEmpty(insertSql))\n{\nreturn MessageEntityTool.GetMessage(ErrorType.SqlError, \"请检查实体类\");\n}\ntry\n{\nrows = conn.Execute(insertSql, model);\nreturn MessageEntityTool.GetMessage(rows);\n}\ncatch (Exception e)\n{\nreturn MessageEntityTool.GetMessage(ErrorType.SqlError, e.Message);\n}\n}\n}\n";
+                return UpdateSql;
+            }
+
         }
         /// <summary>
         /// 获取删除方法
